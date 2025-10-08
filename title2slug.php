@@ -136,14 +136,23 @@ foreach ($chunks as $chunkIndex => $chunk) {
 
     echo "Processing chunk #" . ($chunkIndex + 1) . "...\n";
 
-    $slugs = fetchOpenAISlugs($prompt, $openaiApiKey);
+    try {
+        $slugs = fetchOpenAISlugs($prompt, $openaiApiKey);
+    } catch (Exception $e) {
+        echo "❌ Error in chunk #" . ($chunkIndex + 1) . ": " . $e->getMessage() . "\n";
+        $slugs = array_fill(0, count($chunk), "");
+    }
 
-    if (count($slugs) !== count($chunk)) {
-        echo "Warning: Slug count mismatch in chunk #" . ($chunkIndex + 1) . "\n";
+    if (!is_array($slugs) || count($slugs) !== count($chunk)) {
+        echo "⚠️ Warning: Slug count mismatch in chunk #" . ($chunkIndex + 1) . ". Filling missing items.\n";
+        $missingCount = count($chunk) - count($slugs);
+        for ($i = 0; $i < $missingCount; $i++) {
+            $slugs[] = "";
+        }
     }
 
     foreach ($chunk as $i => $row) {
-        $row['نامک'] = $slugs[$i] ?? '';
+        $row['نامک'] = $slugs[$i] ?? "";
         $allResults[] = $row;
     }
 }
