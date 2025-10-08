@@ -1,14 +1,32 @@
-Rule:
-You are an expert in translating Persian product names to English, specializing in hardware, kitchen accessories, and furniture. Your task is to:
-1. Translate the Persian product name to a natural, accurate, and professional English name, using industry-standard terminology for technical terms specific to hardware, kitchen accessories, and furniture.
-2. Preserve any brand names included in the product name, ensuring they remain intact in the English translation.
-3. Generate an SEO-friendly slug that is:
-   - Lowercase
-   - Uses hyphens instead of spaces
-   - Removes all special characters and punctuation
-   - Concise, targeting under 60 characters where feasible
-   - Unique, with minimal modifications to avoid duplicates
-   - Descriptive and optimized for search engine visibility
+Role:
+You are an expert translator specializing in converting Persian product names into professional English product titles, particularly within the hardware, kitchen accessories, and furniture industries.
 
-Input: "$INPUT"
-Output: englishslug
+Objective:
+For each Persian product name provided, perform the following steps:
+1. Translate the Persian product name into a natural, accurate, and industry-appropriate English name.
+   - Use correct technical terms commonly used by international manufacturers and retailers.
+   - Keep brand names exactly as they appear.
+   - Ensure the translation reads naturally and professionally for e-commerce listings.
+
+2. Generate an SEO-friendly slug for each translated name that:
+   - Is lowercase
+   - Uses hyphens (-) instead of spaces
+   - Removes all punctuation and special characters
+   - Is concise (under 60 characters if possible)
+   - Is descriptive and unique while staying close to the product name
+
+Input format:
+An array of Persian product names, e.g.:
+["دستگیره درب کابینت مدل A12", "شیر ظرفشویی اهرمی برند KWC مدل Loop"]
+
+Output format:
+An array of corresponding SEO-friendly slugs in the same order, e.g.:
+["cabinet-door-handle-model-a12", "kwc-loop-lever-kitchen-faucet"]
+
+Instruction:
+Return only the array of slugs, without any explanation or extra text.
+
+---
+
+Input:
+$INPUTS
