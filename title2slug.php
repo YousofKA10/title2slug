@@ -13,7 +13,7 @@ error_reporting(E_ALL);
 $inputCsv  = __DIR__ . '/input.csv';     // Input CSV path
 $outputCsv = __DIR__ . '/output.csv';    // Output CSV path
 $promptFile = __DIR__ . '/PROMPT.txt';   // Main prompt text file
-$openaiApi = false;
+$openaiApi = true;
 $openaiApiKey = 'YOUR_OPENAI_API_KEY';   // Replace with your real key
 $maxChunkSize = 10;
 
@@ -273,3 +273,4 @@ foreach ($chunks as $chunkIndex => $chunk) {
 writeCsv($outputCsv, $allResults);
 
 echo "✅ Done! Output written to: $outputCsv\n";
+
