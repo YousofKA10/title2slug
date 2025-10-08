@@ -13,6 +13,7 @@ error_reporting(E_ALL);
 $inputCsv  = __DIR__ . '/input.csv';     // Input CSV path
 $outputCsv = __DIR__ . '/output.csv';    // Output CSV path
 $promptFile = __DIR__ . '/PROMPT.txt';   // Main prompt text file
+$openaiApi = false;
 $openaiApiKey = 'YOUR_OPENAI_API_KEY';   // Replace with your real key
 $maxChunkSize = 10;
 
@@ -49,6 +50,94 @@ function writeCsv($filePath, $rows)
 }
 
 /**
+ * Calls third-party AI API (talkai.info) and retries recursively if response is invalid JSON or empty.
+ * Works exactly like fetchOpenAISlugs(), using $prompt as input.
+ */
+function fetchThirdPartySlugs(string $prompt, int $retryCount = 0)
+{
+    $type = "gemini";
+    $model = "gemini-2.0-flash-lite";
+
+    if ($retryCount > 3) {
+        throw new Exception("Failed after 3 retries: Invalid or empty response");
+    }
+
+    $ch = curl_init();
+    $base = "https://" . (empty($type) ? "" : $type . ".") . "talkai.info";
+
+    curl_setopt($ch, CURLOPT_URL, $base . "/chat/send/");
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_HEADER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode([
+        "type" => "chat",
+        "messagesHistory" => [
+            [
+                "id" => uniqid(),
+                "from" => "you",
+                "content" => $prompt
+            ]
+        ],
+        "settings" => [
+            "model" => $model,
+            "temperature" => 0.7
+        ]
+    ]));
+
+    $headers = [
+        'Accept: application/json, text/event-stream',
+        'Content-Type: application/json'
+    ];
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+    curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        curl_close($ch);
+        throw new Exception("cURL error: " . curl_error($ch));
+    }
+
+    $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    $httpCode   = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $body       = substr($response, $headerSize);
+    curl_close($ch);
+
+    if ($httpCode !== 200) {
+        echo "Warning: HTTP code $httpCode. Retrying...\n";
+        sleep(2);
+        return fetchThirdPartySlugs($prompt, $type, $model, $retryCount + 1);
+    }
+
+    $lines = [];
+    foreach (explode("\n", $body) as $line) {
+        if (strpos($line, "data: ") === 0) {
+            $raw_line = substr($line, 6);
+            if (!is_numeric($raw_line)) {
+                $lines[] = $raw_line;
+            }
+        }
+    }
+
+    $text = implode("", $lines);
+    $text = str_replace(["\\n", "\t"], " ", $text);
+    $text = preg_replace("/\s+/", " ", $text);
+    $text = preg_replace('/^\s*[\*\-\•]\s*/m', '', $text);
+    $text = trim($text);
+
+    $decoded = json_decode($text, true);
+
+    if ($decoded === null || !is_array($decoded)) {
+        echo "Warning: Invalid JSON or empty array. Retrying...\n";
+        sleep(2);
+        return fetchThirdPartySlugs($prompt, $type, $model, $retryCount + 1);
+    }
+
+    return $decoded;
+}
+
+/**
  * Calls OpenAI API and retries recursively if response is invalid JSON.
  */
 function fetchOpenAISlugs($prompt, $openaiApiKey, $retryCount = 0)
@@ -65,6 +154,8 @@ function fetchOpenAISlugs($prompt, $openaiApiKey, $retryCount = 0)
             "Content-Type: application/json",
             "Authorization: Bearer $openaiApiKey"
         ],
+        CURLOPT_SSL_VERIFYPEER => false,
+        CURLOPT_SSL_VERIFYHOST => false,
         CURLOPT_POST => true,
         CURLOPT_POSTFIELDS => json_encode([
             "model" => "gpt-5",
@@ -137,7 +228,8 @@ foreach ($chunks as $chunkIndex => $chunk) {
     echo "Processing chunk #" . ($chunkIndex + 1) . "...\n";
 
     try {
-        $slugs = fetchOpenAISlugs($prompt, $openaiApiKey);
+        if ($openaiApi) $slugs = fetchOpenAISlugs($prompt, $openaiApiKey);
+        else $slugs = fetchThirdPartySlugs($prompt);
     } catch (Exception $e) {
         echo "❌ Error in chunk #" . ($chunkIndex + 1) . ": " . $e->getMessage() . "\n";
         $slugs = array_fill(0, count($chunk), "");
